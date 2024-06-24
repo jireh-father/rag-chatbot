@@ -42,8 +42,8 @@ class Bing:
             # "freshness": "Month",
 
         }
-        if freshness:
-            params["freshness"] = freshness
+        # if freshness:
+        #     params["freshness"] = freshness
         response = requests.get(BingSearch.API_URL, headers=self.headers, params=params)
         response.raise_for_status()
 
