@@ -1,4 +1,5 @@
 import requests
+from urllib.parse import urlparse
 
 HOST_WORD_WHITE_LIST = [
     # "blog-korea.com",
