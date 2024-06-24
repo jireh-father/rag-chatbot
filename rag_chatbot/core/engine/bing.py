@@ -49,8 +49,11 @@ class Bing:
 
         search_results = response.json()
         allowed_search_results = []
+        import json
+        json.dumps(search_results)
         if search_results and 'webPages' in search_results and 'value' in search_results['webPages']:
             for result in search_results['webPages']['value']:
+
                 print(result)
                 if not is_allowed_url(result['url']):
                     continue
