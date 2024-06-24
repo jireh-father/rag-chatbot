@@ -24,6 +24,10 @@ class LocalDataIngestion:
         matches = re.findall(pattern, text)
         # Join all matched substrings into a single string
         filtered_text = ' '.join(matches)
+
+        # remove urls
+        filtered_text = re.sub(r'http\S+', '', filtered_text)
+
         # Normalize the text by removing extra whitespaces
         normalized_text = re.sub(r'\s+', ' ', filtered_text.strip())
 
