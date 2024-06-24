@@ -20,6 +20,10 @@ parser.add_argument(
     help="Set host to local or in docker container"
 )
 parser.add_argument(
+    "--pipeline_host", type=str, default="127.0.0.1",
+    help="Set host to local or in docker container"
+)
+parser.add_argument(
     "--share", action='store_true',
     help="Share gradio app"
 )
@@ -42,7 +46,7 @@ logger = Logger(LOG_FILE)
 logger.reset_logs()
 
 # PIPELINE
-pipeline = LocalRAGPipeline(host=args.host)
+pipeline = LocalRAGPipeline(host=args.pipeline_host)
 
 # UI
 ui = LocalChatbotUI(
