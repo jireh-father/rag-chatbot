@@ -13,6 +13,20 @@ HOST_WORD_BLACK_LIST = [
 ]
 
 
+def get_host_from_url(url):
+    parsed_url = urlparse(url)
+    host = parsed_url.netloc
+    return host
+
+
+def is_allowed_url(url):
+    host_name = get_host_from_url(url)
+    if has_black_word(host_name):
+        return False
+
+    return has_white_word(host_name)
+
+
 def has_black_word(host_name):
     for black_keyword in HOST_WORD_BLACK_LIST:
         if black_keyword in host_name:
