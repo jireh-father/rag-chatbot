@@ -23,6 +23,10 @@ parser.add_argument(
     "--share", action='store_true',
     help="Share gradio app"
 )
+parser.add_argument(
+    "--port", type=int, default=7860,
+    help="Set port number"
+)
 args = parser.parse_args()
 
 # OLLAMA SERVER
@@ -53,5 +57,6 @@ ui.build().launch(
     share=args.share,
     server_name="0.0.0.0",
     debug=False,
-    show_api=False
+    show_api=False,
+    server_port=args.port
 )
