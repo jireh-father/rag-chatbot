@@ -50,7 +50,7 @@ class Bing:
         search_results = response.json()
         allowed_search_results = []
         import json
-        json.dumps(search_results)
+        print(json.dumps(search_results))
         if search_results and 'webPages' in search_results and 'value' in search_results['webPages']:
             for result in search_results['webPages']['value']:
 
