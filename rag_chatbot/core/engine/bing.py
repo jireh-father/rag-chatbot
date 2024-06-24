@@ -54,7 +54,7 @@ class Bing:
             # "textDecorations": True,
             # "textFormat": "HTML",
             "count": 30,
-            # "freshness": "Month",
+            "freshness": "Month",
 
         }
         # if freshness:
