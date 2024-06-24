@@ -111,7 +111,6 @@ class LocalChatbotUI:
         else:
             console = sys.stdout
             sys.stdout = self._logger
-            print('message["text"]', message["text"])
             response = self._pipeline.query(chat_mode, message["text"], chatbot)
             for m in self._llm_response.stream_response(
                 message["text"], chatbot, response
