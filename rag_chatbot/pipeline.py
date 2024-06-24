@@ -5,6 +5,7 @@ from .core import (
     LocalEmbedding,
     LocalVectorStore,
     get_system_prompt,
+    Bing
 )
 from llama_index.core import Settings
 from llama_index.core.chat_engine.types import StreamingAgentChatResponse
@@ -20,8 +21,10 @@ class LocalRAGPipeline:
         self._engine = LocalChatEngine(host=host)
         self._default_model = LocalRAGModel.set(self._model_name, host=host, args=args)
         self._query_engine = None
+        self._simple_query_engine = None
         self._ingestion = LocalDataIngestion()
         self._vector_store = LocalVectorStore(host=host)
+        self._bing_engine = Bing(subscription_key=args.bing_subscription_key)
         self.args = args
         Settings.llm = LocalRAGModel.set(host=host, args=args)
         Settings.embed_model = LocalEmbedding.set(host=host, kwargs=args)
@@ -56,6 +59,10 @@ class LocalRAGPipeline:
 
     def reset_engine(self):
         self._query_engine = self._engine.set_engine(
+            llm=self._default_model, nodes=[], language=self._language
+        )
+
+        self._simple_query_engine = self._engine.set_engine(
             llm=self._default_model, nodes=[], language=self._language
         )
 
@@ -101,6 +108,18 @@ class LocalRAGPipeline:
             nodes=self._ingestion.get_ingested_nodes(),
             language=self._language,
         )
+        self._simple_query_engine = self._engine.set_engine(
+            llm=self._default_model,
+            nodes=[],
+            language=self._language,
+        )
+
+    def search_internet(self, query: str):
+        return self._bing_engine.search(query)
+
+    def rewrite_internet_query(self, query):
+        self.simple_query(query)
+        pass
 
     def get_history(self, chatbot: list[list[str]]):
         history = []
@@ -119,3 +138,6 @@ class LocalRAGPipeline:
         else:
             self._query_engine.reset()
             return self._query_engine.stream_chat(message)
+
+    def simple_query(self, message: str):
+        return str(self._simple_query_engine.chat(message))

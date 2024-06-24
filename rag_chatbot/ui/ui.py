@@ -111,6 +111,16 @@ class LocalChatbotUI:
         else:
             console = sys.stdout
             sys.stdout = self._logger
+
+            # todo: rewrite query for internet search
+            # internet_query = self._pipeline.rewrite_internet_query(message["text"])
+
+            # todo: internet search
+            urls = self._pipeline.search_internet(message["text"])#internet_query)
+
+            # todo: ingest internet search result to the pipeline
+            self._pipeline.reset_documents()
+            self._pipeline._ingestion.store_nodes(urls=urls, internet_query=internet_query)
             response = self._pipeline.query(chat_mode, message["text"], chatbot)
             for m in self._llm_response.stream_response(
                 message["text"], chatbot, response

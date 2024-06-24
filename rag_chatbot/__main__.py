@@ -43,6 +43,8 @@ parser.add_argument("--azure_deployment_name", type=str, default=None)
 parser.add_argument("--azure_embed_deployment_name", type=str, default=None)
 # azure_embed_api_version
 parser.add_argument("--azure_embed_api_version", type=str, default=None)
+# bing_subscription_key
+parser.add_argument("--bing_subscription_key", type=str, default=None)
 args = parser.parse_args()
 
 # OLLAMA SERVER

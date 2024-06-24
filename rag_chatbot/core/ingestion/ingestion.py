@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from typing import Any, List
 from tqdm import tqdm
 from ...setting import RAGSettings
+from llama_index.readers.web import SimpleWebPageReader
 
 load_dotenv()
 
@@ -30,14 +31,14 @@ class LocalDataIngestion:
 
     def store_nodes(
         self,
-        input_files: list[str],
+        input_files: list[str] = None,
         embed_nodes: bool = True,
-        embed_model: Any | None = None
+        embed_model: Any | None = None,
+        urls: List[str] = None,
+        internet_query: str = None
     ) -> List[BaseNode]:
         return_nodes = []
         self._ingested_file = []
-        if len(input_files) == 0:
-            return return_nodes
         splitter = SentenceSplitter.from_defaults(
             chunk_size=self._setting.ingestion.chunk_size,
             chunk_overlap=self._setting.ingestion.chunk_overlap,
@@ -46,29 +47,52 @@ class LocalDataIngestion:
         )
         if embed_nodes:
             Settings.embed_model = embed_model or Settings.embed_model
-        for input_file in tqdm(input_files, desc="Ingesting data"):
-            file_name = input_file.strip().split('/')[-1]
-            self._ingested_file.append(file_name)
-            if file_name in self._node_store:
-                return_nodes.extend(self._node_store[file_name])
-            else:
-                document = fitz.open(input_file)
-                all_text = ""
-                for doc_idx, page in enumerate(document):
-                    page_text = page.get_text("text")
-                    page_text = self._filter_text(page_text)
-                    all_text += " " + page_text
-                document = Document(
-                    text=all_text.strip(),
-                    metadata={
-                        "file_name": file_name,
-                    }
-                )
+        if input_files is not None and len(input_files) > 0:
+            for input_file in tqdm(input_files, desc="Ingesting data"):
+                file_name = input_file.strip().split('/')[-1]
+                self._ingested_file.append(file_name)
+                if file_name in self._node_store:
+                    return_nodes.extend(self._node_store[file_name])
+                else:
+                    document = fitz.open(input_file)
+                    all_text = ""
+                    for doc_idx, page in enumerate(document):
+                        page_text = page.get_text("text")
+                        page_text = self._filter_text(page_text)
+                        all_text += " " + page_text
+                    document = Document(
+                        text=all_text.strip(),
+                        metadata={
+                            "file_name": file_name,
+                        }
+                    )
 
-                nodes = splitter([document], show_progress=True)
+                    nodes = splitter([document], show_progress=True)
+                    if embed_nodes:
+                        nodes = Settings.embed_model(nodes, show_progress=True)
+                    self._node_store[file_name] = nodes
+                    return_nodes.extend(nodes)
+        elif urls is not None and len(urls) > 0:
+            if internet_query in self._node_store:
+                return_nodes.extend(self._node_store[internet_query])
+            else:
+                documents = SimpleWebPageReader(html_to_text=True).load_data(urls)
+                parsed_documents = []
+                for doc_idx, (url, site_document) in enumerate(zip(urls, documents)):
+                    page_text = site_document.get_text("text")
+                    page_text = self._filter_text(page_text)
+                    document = Document(
+                        text=page_text.strip(),
+                        metadata={
+                            "url": url,
+                        }
+                    )
+                    parsed_documents.append(document)
+
+                nodes = splitter(parsed_documents, show_progress=True)
                 if embed_nodes:
                     nodes = Settings.embed_model(nodes, show_progress=True)
-                self._node_store[file_name] = nodes
+                self._node_store[internet_query] = nodes
                 return_nodes.extend(nodes)
         return return_nodes
 
