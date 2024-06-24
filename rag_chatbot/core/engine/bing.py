@@ -38,7 +38,7 @@ class Bing:
             "q": keyword,
             # "textDecorations": True,
             # "textFormat": "HTML",
-            "count": answer_count,
+            "count": 30,
             # "freshness": "Month",
 
         }
