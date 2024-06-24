@@ -44,7 +44,7 @@ class Bing:
         }
         # if freshness:
         #     params["freshness"] = freshness
-        response = requests.get(BingSearch.API_URL, headers=self.headers, params=params)
+        response = requests.get(Bing.API_URL, headers=self.headers, params=params)
         response.raise_for_status()
 
         search_results = response.json()
