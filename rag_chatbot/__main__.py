@@ -56,7 +56,8 @@ ui = LocalChatbotUI(
 ui.build().launch(
     share=args.share,
     server_name="0.0.0.0",
-    debug=False,
+    debug=True,
     show_api=False,
-    server_port=args.port
+    server_port=args.port,
+    ssl_verify=False
 )
