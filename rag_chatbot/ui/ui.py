@@ -119,7 +119,7 @@ class LocalChatbotUI:
             sys.stdout = console
 
     def _get_confirm_pull_model(self, model: str):
-        if (model in ["gpt-3.5-turbo", "gpt-4"]) or (self._pipeline.check_exist(model)):
+        if (model in ["gpt-3.5-turbo", "gpt-4"]) or ("gpt-3.5-turbo" in model) or (self._pipeline.check_exist(model)):
             self._change_model(model)
             return (
                 gr.update(visible=False),
@@ -292,8 +292,21 @@ class LocalChatbotUI:
                                     "mixtral:instruct",
                                     "nous-hermes2:10.7b-solar-q4_K_M",
                                     "codeqwen:7b-chat-v1.5-q5_1",
+                                    "azure-gpt-35-turbo-0613-4k",
+                                    "qwen2:7b-instruct"
                                 ],
                                 value=None,
+                                interactive=True,
+                                allow_custom_value=True,
+                            )
+                            embed_model = gr.Dropdown(
+                                label="Choose Embedding Model:",
+                                choices=[
+                                    "BAAI/bge-large-en-v1.5",
+                                    "azure-text-embedding-3-small",
+                                    "azure-text-embedding-3-large"
+                                ],
+                                value="BAAI/bge-large-en-v1.5",
                                 interactive=True,
                                 allow_custom_value=True,
                             )
@@ -340,7 +353,7 @@ class LocalChatbotUI:
                         with gr.Row(variant=self._variant):
                             chat_mode = gr.Dropdown(
                                 choices=["chat", "QA"],
-                                value="QA",
+                                value="chat",
                                 min_width=50,
                                 show_label=False,
                                 interactive=True,
@@ -393,7 +406,7 @@ class LocalChatbotUI:
             clear_btn.click(self._clear_chat, outputs=[message, chatbot, status])
             cancel_btn.click(
                 lambda: (gr.update(visible=False), gr.update(visible=False), None),
-                outputs=[pull_btn, cancel_btn, model],
+                outputs=[pull_btn, cancel_btn, model, embed_model],
             )
             undo_btn.click(self._undo_chat, inputs=[chatbot], outputs=[chatbot])
             reset_btn.click(

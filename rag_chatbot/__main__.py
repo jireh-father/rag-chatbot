@@ -31,6 +31,18 @@ parser.add_argument(
     "--port", type=int, default=7860,
     help="Set port number"
 )
+# azure_api_key
+parser.add_argument("--azure_api_key", type=str, default=None)
+# azure_endpoint
+parser.add_argument("--azure_endpoint", type=str, default=None)
+# azure_api_version
+parser.add_argument("--azure_api_version", type=str, default=None)
+# azure_deployment_name
+parser.add_argument("--azure_deployment_name", type=str, default=None)
+# azure_embed_deployment_name
+parser.add_argument("--azure_embed_deployment_name", type=str, default=None)
+# azure_embed_api_version
+parser.add_argument("--azure_embed_api_version", type=str, default=None)
 args = parser.parse_args()
 
 # OLLAMA SERVER
@@ -46,7 +58,7 @@ logger = Logger(LOG_FILE)
 logger.reset_logs()
 
 # PIPELINE
-pipeline = LocalRAGPipeline(host=args.pipeline_host)
+pipeline = LocalRAGPipeline(host=args.pipeline_host, args=args)
 
 # UI
 ui = LocalChatbotUI(

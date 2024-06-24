@@ -3,6 +3,7 @@ import torch
 import requests
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.embeddings.azure_openai import AzureOpenAIEmbedding
 from transformers import AutoModel, AutoTokenizer
 from ...setting import RAGSettings
 from dotenv import load_dotenv
@@ -16,7 +17,18 @@ class LocalEmbedding:
     def set(setting: RAGSettings | None = None, **kwargs):
         setting = setting or RAGSettings()
         model_name = setting.ingestion.embed_llm
-        if model_name != "text-embedding-ada-002":
+
+        if model_name.startswith("azure"):
+            return AzureOpenAIEmbedding(
+                model="-".join(model_name.split("-")[1:]),
+                deployment_name=args.azure_embed_deployment_name,
+                api_key=args.azure_api_key,
+                azure_endpoint=args.azure_endpoint,
+                api_version=args.azure_embed_api_version,
+            )
+        elif model_name.startswith("openai"):
+            return OpenAIEmbedding()
+        else:
             return HuggingFaceEmbedding(
                 model=AutoModel.from_pretrained(
                     model_name,
@@ -31,8 +43,6 @@ class LocalEmbedding:
                 trust_remote_code=True,
                 embed_batch_size=setting.ingestion.embed_batch_size
             )
-        else:
-            return OpenAIEmbedding()
 
     @staticmethod
     def pull(host: str, **kwargs):

@@ -12,18 +12,19 @@ from llama_index.core.prompts import ChatMessage, MessageRole
 
 
 class LocalRAGPipeline:
-    def __init__(self, host: str = "host.docker.internal") -> None:
+    def __init__(self, host: str = "host.docker.internal", args=None) -> None:
         self._host = host
         self._language = "eng"
         self._model_name = ""
         self._system_prompt = get_system_prompt("eng", is_rag_prompt=False)
         self._engine = LocalChatEngine(host=host)
-        self._default_model = LocalRAGModel.set(self._model_name, host=host)
+        self._default_model = LocalRAGModel.set(self._model_name, host=host, args=args)
         self._query_engine = None
         self._ingestion = LocalDataIngestion()
         self._vector_store = LocalVectorStore(host=host)
-        Settings.llm = LocalRAGModel.set(host=host)
-        Settings.embed_model = LocalEmbedding.set(host=host)
+        self.args = args
+        Settings.llm = LocalRAGModel.set(host=host, args=args)
+        Settings.embed_model = LocalEmbedding.set(host=host, kwargs=args)
 
     def get_model_name(self):
         return self._model_name
