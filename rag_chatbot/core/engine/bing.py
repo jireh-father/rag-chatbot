@@ -51,6 +51,7 @@ class Bing:
         allowed_search_results = []
         if search_results and 'webPages' in search_results and 'value' in search_results['webPages']:
             for result in search_results['webPages']['value']:
+                print(result)
                 if not is_allowed_url(result['url']):
                     continue
                 allowed_search_results.append(result['url'])
