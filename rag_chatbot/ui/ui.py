@@ -114,7 +114,7 @@ class LocalChatbotUI:
 
             # todo: rewrite query for internet search
             # internet_query = self._pipeline.rewrite_internet_query(message["text"])
-
+            internet_query = message['text']
             # todo: internet search
             urls = self._pipeline.search_internet(message["text"])#internet_query)
 
