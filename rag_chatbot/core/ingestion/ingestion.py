@@ -78,13 +78,16 @@ class LocalDataIngestion:
             else:
                 documents = SimpleWebPageReader(html_to_text=True).load_data(urls)
                 parsed_documents = []
+                self._ingested_file.append(internet_query)
                 for doc_idx, (url, site_document) in enumerate(zip(urls, documents)):
                     page_text = site_document.get_text()
                     page_text = self._filter_text(page_text)
+                    print("site_text", url)
+                    print(page_text)
                     document = Document(
                         text=page_text.strip(),
                         metadata={
-                            "url": url,
+                            "file_name": url,
                         }
                     )
                     parsed_documents.append(document)
