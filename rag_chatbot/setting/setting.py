@@ -64,8 +64,8 @@ class RetrieverSettings(BaseModel):
 
 class IngestionSettings(BaseModel):
     embed_llm: str = Field(
-        # default="BAAI/bge-large-en-v1.5", description="Embedding LLM model"
-        default="Qwen/Qwen2-7B-Instruct-GPTQ-Int4", description="Embedding LLM model"
+        default="BAAI/bge-large-en-v1.5", description="Embedding LLM model"
+        # default="Qwen/Qwen2-7B-Instruct-GPTQ-Int4", description="Embedding LLM model"
     )
     embed_batch_size: int = Field(
         default=8, description="Embedding batch size"
