@@ -79,7 +79,7 @@ class LocalDataIngestion:
                 documents = SimpleWebPageReader(html_to_text=True).load_data(urls)
                 parsed_documents = []
                 for doc_idx, (url, site_document) in enumerate(zip(urls, documents)):
-                    page_text = site_document.get_text("text")
+                    page_text = site_document.get_text()
                     page_text = self._filter_text(page_text)
                     document = Document(
                         text=page_text.strip(),
