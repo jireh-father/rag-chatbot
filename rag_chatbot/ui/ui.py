@@ -306,7 +306,7 @@ class LocalChatbotUI:
                                     "qwen2:7b-instruct",
                                     "qwen2:7b-instruct-q8_0"
                                 ],
-                                value="qwen2:7b-instruct",
+                                value="",
                                 interactive=True,
                                 allow_custom_value=True,
                             )
