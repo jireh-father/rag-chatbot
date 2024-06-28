@@ -295,18 +295,18 @@ class LocalChatbotUI:
                             model = gr.Dropdown(
                                 label="Choose Model:",
                                 choices=[
-                                    "llama3-chatqa:8b-v1.5-q8_0",
-                                    "llama3-chatqa:8b-v1.5-q6_K",
-                                    "llama3:8b-instruct-q8_0",
-                                    "starling-lm:7b-beta-q8_0",
-                                    "mixtral:instruct",
-                                    "nous-hermes2:10.7b-solar-q4_K_M",
-                                    "codeqwen:7b-chat-v1.5-q5_1",
-                                    "azure-gpt-35-turbo-0613-4k",
-                                    "qwen2:7b-instruct",
+                                    # "llama3-chatqa:8b-v1.5-q8_0",
+                                    # "llama3-chatqa:8b-v1.5-q6_K",
+                                    # "llama3:8b-instruct-q8_0",
+                                    # "starling-lm:7b-beta-q8_0",
+                                    # "mixtral:instruct",
+                                    # "nous-hermes2:10.7b-solar-q4_K_M",
+                                    # "codeqwen:7b-chat-v1.5-q5_1",
+                                    # "azure-gpt-35-turbo-0613-4k",
+                                    # "qwen2:7b-instruct",
                                     "qwen2:7b-instruct-q8_0"
                                 ],
-                                value="",
+                                value=None,
                                 interactive=True,
                                 allow_custom_value=True,
                             )
