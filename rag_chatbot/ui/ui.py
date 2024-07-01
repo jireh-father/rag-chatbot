@@ -310,17 +310,17 @@ class LocalChatbotUI:
                                 interactive=True,
                                 allow_custom_value=True,
                             )
-                            embed_model = gr.Dropdown(
-                                label="Choose Embedding Model:",
-                                choices=[
-                                    "BAAI/bge-large-en-v1.5",
-                                    "azure-text-embedding-3-small",
-                                    "azure-text-embedding-3-large"
-                                ],
-                                value="BAAI/bge-large-en-v1.5",
-                                interactive=True,
-                                allow_custom_value=True,
-                            )
+                            # embed_model = gr.Dropdown(
+                            #     label="Choose Embedding Model:",
+                            #     choices=[
+                            #         "BAAI/bge-large-en-v1.5",
+                            #         "azure-text-embedding-3-small",
+                            #         "azure-text-embedding-3-large"
+                            #     ],
+                            #     value="BAAI/bge-large-en-v1.5",
+                            #     interactive=True,
+                            #     allow_custom_value=True,
+                            # )
                             with gr.Row():
                                 pull_btn = gr.Button(
                                     value="Pull Model", visible=False, min_width=50
@@ -417,7 +417,7 @@ class LocalChatbotUI:
             clear_btn.click(self._clear_chat, outputs=[message, chatbot, status])
             cancel_btn.click(
                 lambda: (gr.update(visible=False), gr.update(visible=False), None),
-                outputs=[pull_btn, cancel_btn, model, embed_model],
+                outputs=[pull_btn, cancel_btn, model],#, embed_model],
             )
             undo_btn.click(self._undo_chat, inputs=[chatbot], outputs=[chatbot])
             reset_btn.click(
